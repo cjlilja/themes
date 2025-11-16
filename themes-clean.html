@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Timeline</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        * {
+            font-family: Consolas, Monaco, 'Courier New', monospace !important;
+        }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 21px;
+        }
+        /* Increase all Tailwind font sizes by 1px */
+        .text-xs { font-size: 13px !important; }
+        .text-sm { font-size: 15px !important; }
+        .text-base { font-size: 17px !important; }
+        .text-lg { font-size: 19px !important; }
+        .text-xl { font-size: 21px !important; }
+        .text-2xl { font-size: 25px !important; }
+        .text-3xl { font-size: 31px !important; }
+        .text-4xl { font-size: 37px !important; }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#197fe6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.375rem", "xl": "0.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div class="flex flex-col min-h-screen">
+        <!-- TopNavBar -->
+        <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-solid border-slate-200 dark:border-slate-800">
+            <div class="mx-auto max-w-screen-2xl px-6 lg:px-10 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="size-6 text-[#1D2939] dark:text-slate-200">
+                            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_6_543)">
+                                    <path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+                                    <path clip-rule="evenodd" d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z" fill="currentColor" fill-rule="evenodd"></path>
+                                </g>
+                                <defs><clipPath id="clip0_6_543"><rect fill="white" height="48" width="48"></rect></clipPath></defs>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-[#1D2939] dark:text-slate-200 text-xl font-bold">Theme Timeline</h2>
+                            <p class="text-[#6C757D] dark:text-slate-400 text-sm">An interactive timeline of major market themes from 1800 to present.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="overflow-x-auto overflow-y-hidden">
+            <!-- Timeline Canvas -->
+            <div class="relative min-w-[19200px] w-full px-20 pt-4 pb-20">
+                <div class="absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-background-light dark:from-background-dark to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-background-light dark:from-background-dark to-transparent z-10 pointer-events-none"></div>
+                <!-- Complete Timeline (grid + themes + axis) -->
+                <div id="timeline-canvas" class="relative w-full"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="theme-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-8 py-6 rounded-t-2xl">
+                <h2 id="modal-title" class="text-2xl font-bold text-slate-800 dark:text-slate-200">Add New Theme</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Define a historical market theme with timeline and stocks</p>
+            </div>
+
+            <form id="theme-form" onsubmit="saveTheme(event)" class="p-8 space-y-6">
+                <div class="form-group">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Theme Name *</label>
+                    <input type="text" id="theme-name" required class="form-input w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Start Year *</label>
+                        <input type="number" id="start-year" min="1700" max="2100" required class="form-input w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">End Year *</label>
+                        <input type="number" id="end-year" min="1700" max="2100" required class="form-input w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Stocks *</label>
+                    <textarea id="theme-stocks" required placeholder="AAPL, MSFT, GOOGL..." class="form-textarea w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 text-sm placeholder-slate-400 min-h-[140px] resize-y focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"></textarea>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Enter stock names separated by commas or line breaks</p>
+                </div>
+
+                <div class="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <button type="submit" class="flex-1 px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all duration-200">
+                        Save Theme
+                    </button>
+                    <button type="button" class="flex-1 px-6 py-3 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium rounded-lg transition-all duration-200" onclick="closeModal()">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Details Panel -->
+    <div id="details-panel" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="closeDetails(event)">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800" onclick="event.stopPropagation()">
+            <div id="details-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONSTANTS & DATA
+        // ============================================
+
+        const MIN_YEAR = 1800;
+        const MAX_YEAR = 2024;
+        const YEAR_RANGE = MAX_YEAR - MIN_YEAR;
+        const CELL_HEIGHT = 47; // Height of each grid cell (theme box)
+        const CELL_GAP = 0;      // Gap between cells
+        const ROW_HEIGHT = CELL_HEIGHT + CELL_GAP; // Total row height = 47px
+
+        let themes = [];
+        let currentEditingIndex = -1;
+
+        // Monochrome/grayscale color palette for themes
+        const COLOR_PALETTE = [
+            '#1e293b', // slate-900
+            '#334155', // slate-700
+            '#475569', // slate-600
+            '#64748b', // slate-500
+            '#94a3b8', // slate-400
+            '#0f172a', // slate-950
+            '#1c1917', // stone-900
+            '#292524', // stone-800
+            '#44403c', // stone-700
+            '#57534e', // stone-600
+            '#78716c', // stone-500
+            '#18181b', // zinc-900
+            '#27272a', // zinc-800
+            '#3f3f46', // zinc-700
+            '#52525b', // zinc-600
+            '#71717a', // zinc-500
+            '#09090b', // neutral-950
+            '#171717', // neutral-900
+            '#262626', // neutral-800
+            '#404040'  // neutral-700
+        ];
+
+        function generateColor(index, previousColor = null) {
+            let color = COLOR_PALETTE[index % COLOR_PALETTE.length];
+
+            // If this color is the same as the previous theme's color, pick the next one
+            if (previousColor && color === previousColor) {
+                color = COLOR_PALETTE[(index + 1) % COLOR_PALETTE.length];
+            }
+
+            return color;
+        }
+
+        // Sample data (using grayscale colors)
+        const SAMPLE_DATA = [
+            {theme: "Canal & Railroad Era", startYear: 1800, endYear: 1860, stocks: ["Erie Canal Co", "New York Central", "Pennsylvania Railroad", "Baltimore & Ohio", "Reading Railroad"], color: "#1e293b", size: "major"},
+            {theme: "Industrial Revolution", startYear: 1860, endYear: 1914, stocks: ["US Steel", "Standard Oil", "Carnegie Steel", "American Tobacco", "General Electric", "AT&T"], color: "#334155", size: "major"},
+            {theme: "Roaring Twenties", startYear: 1920, endYear: 1929, stocks: ["General Motors", "RCA", "Radio Keith Orpheum", "Montgomery Ward", "Woolworth", "US Steel"], color: "#475569", size: "medium"},
+            {theme: "Great Depression Recovery", startYear: 1932, endYear: 1937, stocks: ["Chrysler", "General Motors", "US Steel", "DuPont", "Union Carbide"], color: "#64748b", size: "small"},
+            {theme: "Television Stocks", startYear: 1948, endYear: 1951, stocks: ["Zenith Radio", "Admiral Corp", "RCA", "Philco", "Motorola", "DuMont Labs", "Emerson Radio", "General Electric", "Westinghouse"], color: "#94a3b8", size: "micro"},
+            {theme: "War Babies / Defense", startYear: 1950, endYear: 1957, stocks: ["Boeing", "Lockheed", "General Dynamics", "United Aircraft", "Douglas Aircraft", "Republic Aviation", "Northrop", "Martin-Marietta"], color: "#0f172a", size: "small"},
+            {theme: "Uranium Mania", startYear: 1953, endYear: 1956, stocks: ["Kerr-McGee", "Union Carbide", "Anaconda Copper", "United Nuclear", "Homestake Mining", "Atlas Corp", "Vitro Corp"], color: "#1c1917", size: "micro"},
+            {theme: "Electronics Boom", startYear: 1959, endYear: 1962, stocks: ["Texas Instruments", "Motorola", "Fairchild Camera", "Varian Associates", "Litton Industries", "Transitron", "Raytheon"], color: "#292524", size: "medium"},
+            {theme: "Conglomerate Craze", startYear: 1965, endYear: 1970, stocks: ["Litton Industries", "LTV", "ITT", "Gulf & Western", "Textron", "Teledyne", "City Investing"], color: "#44403c", size: "medium"},
+            {theme: "Casino Stocks", startYear: 1978, endYear: 1980, stocks: ["Resorts International", "Bally Manufacturing", "Caesars World", "Golden Nugget", "Ramada Inns", "Holiday Inns"], color: "#57534e", size: "small"},
+            {theme: "Biotech / AIDS Drugs", startYear: 1987, endYear: 1992, stocks: ["Amgen", "Genentech", "Biogen", "Chiron", "Immunex", "Centocor", "Genzyme"], color: "#78716c", size: "medium"},
+            {theme: "Japan Bubble", startYear: 1985, endYear: 1989, stocks: ["Sony", "Toyota", "Nomura Securities", "Sumitomo Bank", "Mitsubishi", "NEC", "Canon"], color: "#18181b", size: "small"},
+            {theme: "Internet / Dotcom", startYear: 1995, endYear: 2000, stocks: ["Yahoo", "Amazon", "eBay", "Cisco", "AOL", "Netscape", "Excite", "Lycos", "Priceline", "Pets.com", "Webvan"], color: "#27272a", size: "medium"},
+            {theme: "Housing Bubble", startYear: 2003, endYear: 2007, stocks: ["Countrywide Financial", "Washington Mutual", "KB Home", "Toll Brothers", "Lennar", "Pulte Homes", "New Century Financial"], color: "#3f3f46", size: "small"},
+            {theme: "Solar Stocks", startYear: 2005, endYear: 2008, stocks: ["First Solar", "SunPower", "Suntech Power", "Canadian Solar", "JA Solar", "Trina Solar", "LDK Solar"], color: "#52525b", size: "small"},
+            {theme: "3D Printing", startYear: 2012, endYear: 2014, stocks: ["3D Systems", "Stratasys", "ExOne", "voxeljet", "Organovo", "Proto Labs"], color: "#71717a", size: "micro"},
+            {theme: "Cannabis Stocks", startYear: 2017, endYear: 2019, stocks: ["Canopy Growth", "Aurora Cannabis", "Tilray", "Cronos", "Aphria", "Hexo", "Organigram"], color: "#09090b", size: "micro"},
+            {theme: "COVID Stocks", startYear: 2020, endYear: 2021, stocks: ["Zoom", "Peloton", "DocuSign", "Teladoc", "Moderna", "Novavax", "CureVac", "DraftKings", "Fastly"], color: "#171717", size: "micro"},
+            {theme: "EV / Battery Mania", startYear: 2020, endYear: 2022, stocks: ["Tesla", "NIO", "XPeng", "Li Auto", "Rivian", "Lucid", "QuantumScape", "ChargePoint", "Proterra"], color: "#262626", size: "small"},
+            {theme: "Meme Stocks", startYear: 2021, endYear: 2021, stocks: ["GameStop", "AMC Entertainment", "BlackBerry", "Nokia", "Bed Bath & Beyond", "Sundial Growers", "Clover Health"], color: "#404040", size: "micro"},
+            {theme: "AI / LLM Boom", startYear: 2023, endYear: 2024, stocks: ["NVIDIA", "Microsoft", "Meta", "Palantir", "C3.ai", "SoundHound", "BigBear.ai", "ARM Holdings", "Super Micro"], color: "#1e293b", size: "small"},
+            {theme: "Post-War Boom", startYear: 1945, endYear: 1975, stocks: ["General Electric", "IBM", "Boeing", "General Motors", "Ford", "Coca-Cola", "Procter & Gamble"], color: "#334155", size: "major"},
+            {theme: "Information Age", startYear: 1980, endYear: 2024, stocks: ["Microsoft", "Apple", "Google", "Amazon", "Facebook", "Intel", "Cisco", "Oracle"], color: "#475569", size: "major"}
+        ];
+
+        // ============================================
+        // GRID-BASED RENDERING
+        // ============================================
+
+        function renderTimeline() {
+            const canvas = document.getElementById('timeline-canvas');
+            canvas.innerHTML = '';
+
+            // STEP 1: Build the grid structure first
+            const grid = buildGrid();
+
+            // STEP 2: Assign themes to grid cells
+            assignThemesToGrid(grid, themes);
+
+            // STEP 3: Render everything
+            renderGrid(canvas, grid);
+            renderYearMarkers(canvas);
+        }
+
+        function buildGrid() {
+            const grid = {
+                rows: [],
+                totalHeight: 0
+            };
+
+            // Calculate how many rows we need (max 10 for display purposes)
+            const maxRows = 10;
+
+            for (let i = 0; i < maxRows; i++) {
+                grid.rows.push({
+                    index: i,
+                    bottom: i * ROW_HEIGHT, // Position from bottom
+                    themes: []
+                });
+            }
+
+            grid.totalHeight = maxRows * ROW_HEIGHT;
+
+            return grid;
+        }
+
+        function assignThemesToGrid(grid, filteredThemes) {
+            // Sort themes: longer duration first, then by start year
+            const sorted = [...filteredThemes].sort((a, b) => {
+                const durA = a.endYear - a.startYear;
+                const durB = b.endYear - b.startYear;
+                if (durB !== durA) return durB - durA;
+                return a.startYear - b.startYear;
+            });
+
+            // Assign each theme to the first available row (no horizontal overlap)
+            sorted.forEach(theme => {
+                for (let row of grid.rows) {
+                    const hasOverlap = row.themes.some(existing =>
+                        !(theme.endYear <= existing.startYear || theme.startYear >= existing.endYear)
+                    );
+
+                    if (!hasOverlap) {
+                        row.themes.push(theme);
+                        theme._gridRow = row.index;
+                        break;
+                    }
+                }
+            });
+        }
+
+        function renderGrid(canvas, grid) {
+            // Set canvas height to accommodate grid + year markers
+            canvas.style.height = `${grid.totalHeight + 80}px`;
+
+            // Render horizontal grid lines FIRST (lower z-index)
+            grid.rows.forEach(row => {
+                const line = document.createElement('div');
+                line.className = 'absolute w-full';
+                line.style.bottom = `${row.bottom}px`;
+                line.style.height = '0px';
+                line.style.borderTop = '1px solid #ADB5BD';
+                line.style.zIndex = '0';
+                line.style.pointerEvents = 'none';
+                canvas.appendChild(line);
+            });
+
+            // Add top horizontal line (roof)
+            const topLine = document.createElement('div');
+            topLine.className = 'absolute w-full';
+            topLine.style.bottom = `${grid.totalHeight}px`;
+            topLine.style.height = '0px';
+            topLine.style.borderTop = '1px solid #ADB5BD';
+            topLine.style.zIndex = '0';
+            topLine.style.pointerEvents = 'none';
+            canvas.appendChild(topLine);
+
+            // Render vertical grid lines for each year (lower z-index)
+            for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+                const xPercent = ((year - MIN_YEAR) / YEAR_RANGE) * 100;
+                const isDecade = year % 10 === 0;
+                const line = document.createElement('div');
+                line.className = 'absolute';
+                line.style.left = `${xPercent}%`;
+                line.style.bottom = '-15px';
+                line.style.height = `${grid.totalHeight + 15}px`;
+                line.style.width = '0px';
+                line.style.borderLeft = isDecade ? '2px solid #ADB5BD' : '1px solid #ADB5BD';
+                line.style.zIndex = '0';
+                line.style.pointerEvents = 'none';
+                canvas.appendChild(line);
+            }
+
+            // Render theme blocks in their assigned grid cells ON TOP (higher z-index)
+            grid.rows.forEach(row => {
+                row.themes.forEach(theme => {
+                    const block = createThemeBlock(theme, row);
+                    canvas.appendChild(block);
+                });
+            });
+        }
+
+        function createThemeBlock(theme, row) {
+            const startPercent = ((theme.startYear - MIN_YEAR) / YEAR_RANGE) * 100;
+            const widthPercent = ((theme.endYear - theme.startYear) / YEAR_RANGE) * 100;
+
+            const block = document.createElement('div');
+            block.className = 'absolute cursor-pointer flex items-center px-3';
+            block.style.left = `${startPercent}%`;
+            block.style.width = `${widthPercent}%`;
+            block.style.bottom = `${row.bottom}px`;
+            block.style.height = `${CELL_HEIGHT}px`;
+            block.style.backgroundColor = theme.color;
+            block.style.boxSizing = 'border-box';
+            block.style.zIndex = '10';
+
+            // Text color contrast
+            const textColor = getContrastColor(theme.color);
+            block.style.color = textColor;
+
+            // Font size based on duration
+            const duration = theme.endYear - theme.startYear;
+            let fontSize = 'text-sm';
+            if (duration >= 30) fontSize = 'text-base';
+            else if (duration <= 3) fontSize = 'text-xs';
+
+            // Get emoji for this theme
+            const emoji = getThemeEmoji(theme.theme);
+
+            block.innerHTML = `<p class="${fontSize} font-semibold whitespace-nowrap overflow-hidden text-ellipsis"><span class="mr-1.5">${emoji}</span>${theme.theme}</p>`;
+            block.onclick = () => showDetails(theme, themes.indexOf(theme));
+
+            return block;
+        }
+
+        function renderYearMarkers(canvas) {
+            const markersContainer = document.createElement('div');
+            markersContainer.className = 'absolute inset-x-0 h-12';
+            markersContainer.style.bottom = '-60px'; // Position well below the grid
+            markersContainer.innerHTML = '<div class="relative w-full h-full"><div id="year-markers"></div></div>';
+            canvas.appendChild(markersContainer);
+
+            const yearMarkers = markersContainer.querySelector('#year-markers');
+
+            for (let year = MIN_YEAR; year <= MAX_YEAR; year++) {
+                const xPercent = ((year - MIN_YEAR) / YEAR_RANGE) * 100;
+                const isDecade = year % 10 === 0;
+
+                const marker = document.createElement('div');
+                marker.className = 'absolute top-0 text-center w-px -ml-px';
+                marker.style.left = `${xPercent}%`;
+
+                marker.innerHTML = `
+                    <span class="${isDecade ? 'text-sm font-semibold' : 'text-xs'} text-[#6C757D] dark:text-slate-400 -ml-4">${year}</span>
+                `;
+
+                yearMarkers.appendChild(marker);
+            }
+        }
+
+        function getContrastColor(hexColor) {
+            const r = parseInt(hexColor.substr(1, 2), 16);
+            const g = parseInt(hexColor.substr(3, 2), 16);
+            const b = parseInt(hexColor.substr(5, 2), 16);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.5 ? '#1e293b' : '#ffffff';
+        }
+
+        function getThemeEmoji(themeName) {
+            const name = themeName.toLowerCase();
+
+            // Keyword-based emoji mapping
+            if (name.includes('railroad') || name.includes('canal')) return '🚂';
+            if (name.includes('industrial')) return '🏭';
+            if (name.includes('roaring') || name.includes('twenties')) return '🎷';
+            if (name.includes('depression')) return '📉';
+            if (name.includes('television') || name.includes('tv')) return '📺';
+            if (name.includes('war') || name.includes('defense') || name.includes('military')) return '✈️';
+            if (name.includes('uranium') || name.includes('nuclear')) return '☢️';
+            if (name.includes('electronics')) return '🔌';
+            if (name.includes('conglomerate')) return '🏢';
+            if (name.includes('casino') || name.includes('gambling')) return '🎰';
+            if (name.includes('biotech') || name.includes('aids') || name.includes('drug')) return '💊';
+            if (name.includes('japan')) return '🇯🇵';
+            if (name.includes('internet') || name.includes('dotcom') || name.includes('web')) return '🌐';
+            if (name.includes('housing') || name.includes('real estate')) return '🏠';
+            if (name.includes('solar') || name.includes('renewable')) return '☀️';
+            if (name.includes('3d') || name.includes('printing')) return '🖨️';
+            if (name.includes('cannabis') || name.includes('marijuana')) return '🌿';
+            if (name.includes('covid') || name.includes('pandemic')) return '😷';
+            if (name.includes('ev') || name.includes('electric') || name.includes('battery')) return '🔋';
+            if (name.includes('meme')) return '🚀';
+            if (name.includes('ai') || name.includes('llm') || name.includes('artificial')) return '🤖';
+            if (name.includes('post-war') || name.includes('boom')) return '📈';
+            if (name.includes('information') || name.includes('tech') || name.includes('computer')) return '💻';
+
+            // Default emoji
+            return '📊';
+        }
+
+        // ============================================
+        // DATA MANAGEMENT
+        // ============================================
+
+        async function loadData() {
+            // Load from Google Sheets
+            const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTsb2bCHBJ3TSJLmSY8RbqIm1t9nXGz4XWBIT2y-VMBcg2D068CyyD3cjTJlOu-kQn-KpP6VsaOi03w/pub?gid=1959088866&single=true&output=csv';
+
+            console.log('🔄 Loading data from Google Sheets...');
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_URL + '&t=' + Date.now());
+                console.log('Response status:', response.status);
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+                const csvText = await response.text();
+                console.log('CSV length:', csvText.length, 'characters');
+                console.log('First 500 chars:', csvText.substring(0, 500));
+
+                const lines = csvText.trim().split('\n');
+                console.log('Total lines:', lines.length);
+                console.log('Header line:', lines[0]);
+
+                const parsedThemes = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.trim()) continue;
+
+                    // Split by comma, handling quoted fields
+                    const values = [];
+                    let current = '';
+                    let inQuotes = false;
+
+                    for (let char of line) {
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    values.push(current.trim());
+
+                    // Check if the first value contains the entire theme data (Google Sheets quirk)
+                    let parsedValues = values;
+                    if (values[0] && values[0].includes(',')) {
+                        // First field contains the theme data, split it
+                        parsedValues = values[0].split(',').map(v => v.trim());
+                        // Add remaining stocks from the other columns
+                        for (let j = 1; j < values.length; j++) {
+                            if (values[j] && values[j].trim()) {
+                                parsedValues.push(values[j].trim());
+                            }
+                        }
+                    }
+
+                    if (parsedValues.length >= 4) {
+                        const stocks = [];
+
+                        // Check if parsedValues[3] is a color (starts with #) or a stock
+                        const hasColor = parsedValues[3] && parsedValues[3].startsWith('#');
+                        const stockStartIndex = hasColor ? 4 : 3;
+
+                        // Collect all stock values
+                        for (let j = stockStartIndex; j < parsedValues.length; j++) {
+                            if (parsedValues[j] && parsedValues[j].trim()) {
+                                stocks.push(parsedValues[j].trim());
+                            }
+                        }
+
+                        // Also collect from original values array (stocks might be in separate columns)
+                        for (let j = 1; j < values.length; j++) {
+                            if (values[j] && values[j].trim() && !values[j].match(/^\d+$/) && !values[j].startsWith('#')) {
+                                stocks.push(values[j].trim());
+                            }
+                        }
+
+                        const previousColor = parsedThemes.length > 0 ? parsedThemes[parsedThemes.length - 1].color : null;
+                        parsedThemes.push({
+                            theme: parsedValues[0],
+                            startYear: parseInt(parsedValues[1]),
+                            endYear: parseInt(parsedValues[2]),
+                            color: hasColor ? parsedValues[3] : generateColor(parsedThemes.length, previousColor),
+                            stocks: [...new Set(stocks)] // Remove duplicates
+                        });
+
+                        console.log(`Parsed theme: ${parsedValues[0]} (${parsedValues[1]}-${parsedValues[2]}) with ${stocks.length} stocks`);
+                    }
+                }
+
+                if (parsedThemes.length > 0) {
+                    themes = parsedThemes;
+                    console.log(`✅ Loaded ${themes.length} themes from Google Sheets`);
+                    return;
+                }
+            } catch (error) {
+                console.error('❌ Failed to load from Google Sheets:', error);
+            }
+
+            // Fallback to SAMPLE_DATA if Google Sheets fails
+            console.log('⚠️ Using fallback SAMPLE_DATA');
+            themes = [...SAMPLE_DATA];
+        }
+
+        async function saveData() {
+            // Note: Changes are local only. To persist to Google Sheets,
+            // export CSV and manually update the sheet, or use Google Sheets API
+            console.log('Data saved locally');
+        }
+
+        async function refreshFromSheets() {
+            const GOOGLE_SHEETS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTsb2bCHBJ3TSJLmSY8RbqIm1t9nXGz4XWBIT2y-VMBcg2D068CyyD3cjTJlOu-kQn-KpP6VsaOi03w/pub?gid=1959088866&single=true&output=csv';
+
+            console.log('🔄 Refreshing data from Google Sheets...');
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_URL + '&t=' + Date.now());
+                console.log('Refresh response status:', response.status);
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+                const csvText = await response.text();
+                console.log('Refresh CSV length:', csvText.length, 'characters');
+                console.log('Refresh first 500 chars:', csvText.substring(0, 500));
+
+                const lines = csvText.trim().split('\n');
+                console.log('Refresh total lines:', lines.length);
+
+                const parsedThemes = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.trim()) continue;
+
+                    // Split by comma, handling quoted fields
+                    const values = [];
+                    let current = '';
+                    let inQuotes = false;
+
+                    for (let char of line) {
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(current.trim());
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    values.push(current.trim());
+
+                    // Check if the first value contains the entire theme data (Google Sheets quirk)
+                    let parsedValues = values;
+                    if (values[0] && values[0].includes(',')) {
+                        // First field contains the theme data, split it
+                        parsedValues = values[0].split(',').map(v => v.trim());
+                        // Add remaining stocks from the other columns
+                        for (let j = 1; j < values.length; j++) {
+                            if (values[j] && values[j].trim()) {
+                                parsedValues.push(values[j].trim());
+                            }
+                        }
+                    }
+
+                    if (parsedValues.length >= 4) {
+                        const stocks = [];
+
+                        // Check if parsedValues[3] is a color (starts with #) or a stock
+                        const hasColor = parsedValues[3] && parsedValues[3].startsWith('#');
+                        const stockStartIndex = hasColor ? 4 : 3;
+
+                        // Collect all stock values
+                        for (let j = stockStartIndex; j < parsedValues.length; j++) {
+                            if (parsedValues[j] && parsedValues[j].trim()) {
+                                stocks.push(parsedValues[j].trim());
+                            }
+                        }
+
+                        // Also collect from original values array (stocks might be in separate columns)
+                        for (let j = 1; j < values.length; j++) {
+                            if (values[j] && values[j].trim() && !values[j].match(/^\d+$/) && !values[j].startsWith('#')) {
+                                stocks.push(values[j].trim());
+                            }
+                        }
+
+                        const previousColor = parsedThemes.length > 0 ? parsedThemes[parsedThemes.length - 1].color : null;
+                        parsedThemes.push({
+                            theme: parsedValues[0],
+                            startYear: parseInt(parsedValues[1]),
+                            endYear: parseInt(parsedValues[2]),
+                            color: hasColor ? parsedValues[3] : generateColor(parsedThemes.length, previousColor),
+                            stocks: [...new Set(stocks)] // Remove duplicates
+                        });
+                    }
+                }
+
+                if (parsedThemes.length > 0) {
+                    themes = parsedThemes;
+                    renderTimeline();
+                    console.log(`✅ Refreshed ${themes.length} themes from Google Sheets`);
+                } else {
+                    console.log('⚠️ No themes parsed from CSV');
+                }
+            } catch (error) {
+                console.error('❌ Failed to refresh from Google Sheets:', error);
+            }
+        }
+
+        // Auto-refresh from Google Sheets every 30 seconds
+        setInterval(refreshFromSheets, 30000);
+
+        // ============================================
+        // DETAILS PANEL
+        // ============================================
+
+        function showDetails(theme, index) {
+            const panel = document.getElementById('details-panel');
+            const content = document.getElementById('details-content');
+
+            // Ensure stocks is always an array
+            const stocks = Array.isArray(theme.stocks) ? theme.stocks : theme.stocks.split(';').map(s => s.trim()).filter(s => s);
+
+            const duration = theme.endYear - theme.startYear;
+
+            content.innerHTML = `
+                <div class="p-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h2 class="text-3xl font-bold text-slate-800 dark:text-slate-200">${theme.theme}</h2>
+                            </div>
+                            <div class="flex items-center gap-3 text-slate-500">
+                                <span class="text-base font-medium">${theme.startYear} - ${theme.endYear}</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-sm px-2 py-1 rounded-lg bg-slate-100 dark:bg-slate-800">${duration} years</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-sm">${stocks.length} stocks</span>
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl shadow-sm border border-black/10" style="background-color: ${theme.color}"></div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mt-6">
+                        ${stocks.map(stock => `
+                            <span class="inline-flex items-center px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg border border-slate-200 dark:border-slate-700">
+                                ${stock}
+                            </span>
+                        `).join('')}
+                    </div>
+
+                    <div class="flex gap-3 mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+                        <button onclick="closeDetails()" class="px-5 py-2.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium rounded-lg transition-all duration-200">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            panel.classList.remove('hidden');
+        }
+
+        function closeDetails(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('details-panel').classList.add('hidden');
+        }
+
+        // ============================================
+        // THEME CRUD OPERATIONS
+        // ============================================
+
+        function addTheme() {
+            currentEditingIndex = -1;
+            document.getElementById('modal-title').textContent = 'Add New Theme';
+            document.getElementById('theme-form').reset();
+            document.getElementById('theme-modal').classList.remove('hidden');
+        }
+
+        function editTheme(index) {
+            currentEditingIndex = index;
+            const theme = themes[index];
+
+            document.getElementById('modal-title').textContent = 'Edit Theme';
+            document.getElementById('theme-name').value = theme.theme;
+            document.getElementById('start-year').value = theme.startYear;
+            document.getElementById('end-year').value = theme.endYear;
+            document.getElementById('theme-stocks').value = theme.stocks.join('\n');
+
+            closeDetails();
+            document.getElementById('theme-modal').classList.remove('hidden');
+        }
+
+        function saveTheme(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('theme-name').value.trim();
+            const startYear = parseInt(document.getElementById('start-year').value);
+            const endYear = parseInt(document.getElementById('end-year').value);
+            const stocksText = document.getElementById('theme-stocks').value;
+
+            const stocks = stocksText
+                .split(/[\n,]+/)
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+
+            if (stocks.length === 0) {
+                alert('Please enter at least one stock');
+                return;
+            }
+
+            if (endYear < startYear) {
+                alert('End year must be after start year');
+                return;
+            }
+
+            // Auto-generate color based on index
+            const previousColor = themes.length > 0 ? themes[themes.length - 1].color : null;
+            const color = currentEditingIndex === -1
+                ? generateColor(themes.length, previousColor)
+                : themes[currentEditingIndex].color;
+
+            const theme = {theme: name, startYear, endYear, stocks, color};
+
+            if (currentEditingIndex === -1) {
+                themes.push(theme);
+            } else {
+                themes[currentEditingIndex] = theme;
+            }
+
+            saveData();
+            closeModal();
+            renderTimeline();
+        }
+
+        function confirmDeleteTheme(index) {
+            if (confirm(`Are you sure you want to delete "${themes[index].theme}"?`)) {
+                themes.splice(index, 1);
+                saveData();
+                closeDetails();
+                renderTimeline();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('theme-modal').classList.add('hidden');
+        }
+
+        // ============================================
+        // CSV EXPORT/IMPORT
+        // ============================================
+
+        function exportCSV() {
+            const headers = ['Theme', 'Start Year', 'End Year', 'Color', 'Stocks'];
+            const rows = themes.map(t => [
+                t.theme,
+                t.startYear,
+                t.endYear,
+                t.color,
+                t.stocks.join('; ')
+            ]);
+
+            const csv = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `market-themes-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                const lines = text.split('\n').filter(line => line.trim());
+                const dataLines = lines.slice(1);
+                const imported = [];
+
+                dataLines.forEach(line => {
+                    const matches = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
+                    if (!matches || matches.length < 3) return;
+
+                    const values = matches.map(s => s.replace(/^"|"$/g, '').trim());
+                    const theme = values[0];
+                    const startYear = parseInt(values[1]);
+                    const endYear = parseInt(values[2]);
+
+                    let size = values[3];
+                    if (!size || size === 'undefined') {
+                        const duration = endYear - startYear;
+                        if (duration >= 30) size = 'major';
+                        else if (duration >= 10) size = 'medium';
+                        else if (duration >= 3) size = 'small';
+                        else size = 'micro';
+                    }
+
+                    let color = values[4];
+                    if (!color || color === 'undefined') {
+                        const colorMap = {'major': '#A8DADC', 'medium': '#B5E48C', 'small': '#CDB4DB', 'micro': '#FFDAB9'};
+                        color = colorMap[size];
+                    }
+
+                    const stocks = [];
+                    for (let i = 5; i < values.length; i++) {
+                        if (values[i] && values[i].trim()) {
+                            stocks.push(values[i].trim());
+                        }
+                    }
+
+                    if (stocks.length === 0 && values[5]) {
+                        stocks.push(...values[5].split(';').map(s => s.trim()).filter(s => s));
+                    }
+
+                    if (stocks.length > 0) {
+                        imported.push({theme, startYear, endYear, size, color, stocks});
+                    }
+                });
+
+                if (imported.length > 0) {
+                    if (confirm(`Import ${imported.length} themes? This will replace your current data.`)) {
+                        themes = imported;
+                        saveData();
+                        renderTimeline();
+                    }
+                } else {
+                    alert('No valid themes found in CSV file');
+                }
+            };
+
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ============================================
+        // SEARCH
+        // ============================================
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+
+        window.onload = async () => {
+            await loadData();
+            renderTimeline();
+        };
+
+        window.onresize = () => {
+            renderTimeline();
+        };
+    </script>
+</body>
+</html>
